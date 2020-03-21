@@ -204,6 +204,10 @@ class OptionParser : public OptionContainer {
       return std::vector<std::string>(_leftover.begin(), _leftover.end());
     }
 
+    std::vector<std::string> parsed_args() {
+      return std::vector<std::string>(_parsed.begin(), _parsed.end());
+    }
+
     std::string format_help() const;
     void print_help() const;
 
@@ -246,6 +250,7 @@ class OptionParser : public OptionContainer {
 
     std::list<std::string> _remaining;
     std::list<std::string> _leftover;
+    std::list<std::string> _parsed;
 
     friend class Option;
 };

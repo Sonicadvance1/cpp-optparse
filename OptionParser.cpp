@@ -208,6 +208,7 @@ const Option& OptionParser::lookup_short_opt(const string& opt) const {
 
 void OptionParser::handle_short_opt(const string& opt, const string& arg) {
 
+  _parsed.emplace_back(string("-") + opt);
   _remaining.pop_front();
   string value;
 
@@ -219,6 +220,7 @@ void OptionParser::handle_short_opt(const string& opt, const string& arg) {
         error("-" + opt + " " + _("option requires an argument"));
       value = _remaining.front();
       _remaining.pop_front();
+      _parsed.emplace_back(value);
     }
   } else {
     if (arg.length() > 2)
@@ -277,6 +279,8 @@ void OptionParser::handle_long_opt(const string& optstr) {
 Values& OptionParser::parse_args(const int argc, char const* const* const argv) {
   if (prog() == "")
     prog(basename(argv[0]));
+
+  _parsed.emplace_back(argv[0]);
   return parse_args(&argv[1], &argv[argc]);
 }
 Values& OptionParser::parse_args(const vector<string>& v) {
@@ -301,6 +305,7 @@ Values& OptionParser::parse_args(const vector<string>& v) {
     }
 
     if (arg.substr(0,2) == "--") {
+      _parsed.emplace_back(arg);
       handle_long_opt(arg.substr(2));
     } else if (arg.substr(0,1) == "-" and arg.length() > 1) {
       handle_short_opt(arg.substr(1,1), arg);
