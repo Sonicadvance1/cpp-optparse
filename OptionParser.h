@@ -86,6 +86,7 @@ class Option {
     template<typename T>
     Option& set_default(T t) { std::ostringstream ss; ss << t; _default = ss.str(); return *this; }
     Option& nargs(size_t n) { _nargs = n; return *this; }
+    Option& set_optional_value (bool v) { _optional_value = v; return *this; }
     Option& set_const(const std::string& c) { _const = c; return *this; }
     template<typename InputIterator>
     Option& choices(InputIterator begin, InputIterator end) {
@@ -121,6 +122,7 @@ class Option {
     std::set<std::string> _short_opts;
     std::set<std::string> _long_opts;
 
+    bool _optional_value;
     std::string _action;
     std::string _type;
     std::string _dest;

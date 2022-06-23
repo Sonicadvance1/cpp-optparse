@@ -216,11 +216,20 @@ void OptionParser::handle_short_opt(const string& opt, const string& arg) {
   if (option._nargs == 1) {
     value = arg.substr(2);
     if (value == "") {
-      if (_remaining.empty())
-        error("-" + opt + " " + _("option requires an argument"));
-      value = _remaining.front();
-      _remaining.pop_front();
-      _parsed.emplace_back(value);
+      if (_remaining.empty()) {
+        if (option._optional_value) {
+          value = option.get_default();
+          _parsed.emplace_back(value);
+        }
+        else {
+          error("-" + opt + " " + _("option requires an argument"));
+        }
+      }
+      else {
+        value = _remaining.front();
+        _remaining.pop_front();
+        _parsed.emplace_back(value);
+      }
     }
   } else {
     if (arg.length() > 2)
@@ -523,8 +532,14 @@ string Option::format_option_help(unsigned int indent /* = 2 */) const {
       mvar = dest();
       transform(mvar.begin(), mvar.end(), mvar.begin(), ::toupper);
      }
-    mvar_short = " " + mvar;
-    mvar_long = "=" + mvar;
+    if (_optional_value) {
+      mvar_short = " [" + mvar + "]";
+      mvar_long = "[=" + mvar + "]";
+    }
+    else {
+      mvar_short = " " + mvar;
+      mvar_long = "=" + mvar;
+    }
   }
 
   stringstream ss;
