@@ -16,6 +16,7 @@
 
 #include <map>
 #include <iostream>
+#include <optional>
 
 namespace optparse {
 
@@ -57,12 +58,12 @@ class Value {
 class Values {
   public:
     Values() : _map() {}
-    const fextl::string& operator[] (const fextl::string& d) const;
+    std::optional<const fextl::string*> operator[] (const fextl::string& d) const;
     fextl::string& operator[] (const fextl::string& d) { return _map[d]; }
     bool is_set(const fextl::string& d) const { return _map.find(d) != _map.end(); }
     bool is_set_by_user(const fextl::string& d) const { return _userSet.find(d) != _userSet.end(); }
     void is_set_by_user(const fextl::string& d, bool yes);
-    Value get(const fextl::string& d) const { return (is_set(d)) ? Value((*this)[d]) : Value(); }
+    Value get(const fextl::string& d) const { return (is_set(d)) ? Value(*(*this)[d].value()) : Value(); }
 
     typedef fextl::list<fextl::string>::iterator iterator;
     typedef fextl::list<fextl::string>::const_iterator const_iterator;

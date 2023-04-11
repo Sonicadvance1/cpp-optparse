@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <complex>
 #include <ciso646>
+#include <optional>
 
 #if defined(ENABLE_NLS) && ENABLE_NLS
 # include <libintl.h>
@@ -476,10 +477,9 @@ void OptionParser::error(const fextl::string& msg) const {
 ////////// } class OptionParser //////////
 
 ////////// class Values { //////////
-const fextl::string& Values::operator[] (const fextl::string& d) const {
+std::optional<const fextl::string*> Values::operator[] (const fextl::string& d) const {
   strMap::const_iterator it = _map.find(d);
-  static const fextl::string empty = "";
-  return (it != _map.end()) ? it->second : empty;
+  return (it != _map.end()) ? std::optional(&it->second) : std::nullopt;
 }
 void Values::is_set_by_user(const fextl::string& d, bool yes) {
   if (yes)
