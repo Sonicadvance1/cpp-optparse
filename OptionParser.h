@@ -8,6 +8,7 @@
 #define OPTIONPARSER_H_
 
 #include <FEXCore/fextl/list.h>
+#include <FEXCore/fextl/map.h>
 #include <FEXCore/fextl/set.h>
 #include <FEXCore/fextl/string.h>
 #include <FEXCore/fextl/sstream.h>
@@ -25,9 +26,9 @@ class Values;
 class Value;
 class Callback;
 
-typedef std::map<fextl::string,fextl::string> strMap;
-typedef std::map<fextl::string,fextl::list<fextl::string> > lstMap;
-typedef std::map<fextl::string,Option const*> optMap;
+typedef fextl::map<fextl::string,fextl::string> strMap;
+typedef fextl::map<fextl::string,fextl::list<fextl::string> > lstMap;
+typedef fextl::map<fextl::string,Option const*> optMap;
 
 const char* const SUPPRESS_HELP = "SUPPRESS" "HELP";
 const char* const SUPPRESS_USAGE = "SUPPRESS" "USAGE";
@@ -71,7 +72,7 @@ class Values {
   private:
     strMap _map;
     lstMap _appendMap;
-    std::set<fextl::string> _userSet;
+    fextl::set<fextl::string> _userSet;
 };
 
 class Option {
@@ -120,8 +121,8 @@ class Option {
 
     const OptionParser& _parser;
 
-    std::set<fextl::string> _short_opts;
-    std::set<fextl::string> _long_opts;
+    fextl::set<fextl::string> _short_opts;
+    fextl::set<fextl::string> _long_opts;
 
     bool _optional_value;
     fextl::string _action;
