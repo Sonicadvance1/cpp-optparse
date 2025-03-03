@@ -467,7 +467,7 @@ void OptionParser::print_version() const {
 }
 
 void OptionParser::exit() const {
-  throw 2;
+  std::exit(EXIT_FAILURE);
 }
 void OptionParser::error(const fextl::string& msg) const {
   print_usage(std::cerr);
